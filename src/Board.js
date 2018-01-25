@@ -135,12 +135,44 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+      let rows = this.rows();// get rows
+      for (let i = 0; i < rows.length; i++) {// iterate through column (rows[i][column]...)
+        let currentItem = rows[i][majorDiagonalColumnIndexAtFirstRow];// locate pieces in column
+        if (currentItem === 1) {
+          let sum = 0;
+          let col = majorDiagonalColumnIndexAtFirstRow;
+          let row = i;
+          while (row !== 0 && col !== 0) {
+            row--;
+            col--;
+          }
+          //debugger;
+          while(rows[row] !== undefined && rows[row][col] !== undefined) {
+            if (rows[row][col] === 1) {
+              sum++;
+            }
+            row++;
+            col++;
+          }
+          if (sum > 1) {
+            return true;
+          }
+        }// if piece located
+        // check diagonal backwards and forwards
+      }
       return false; // fixme
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      let rows = this.rows();
+      for (let i = 0; i < rows.length; i++) {
+        let hasConflict = this.hasMajorDiagonalConflictAt(i);
+        if (hasConflict) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -150,12 +182,43 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+      let rows = this.rows();// get rows
+      for (let i = 0; i < rows.length; i++) {// iterate through column (rows[i][column]...)
+        let currentItem = rows[i][minorDiagonalColumnIndexAtFirstRow];// locate pieces in column
+        if (currentItem === 1) {
+          let sum = 0;
+          let col = minorDiagonalColumnIndexAtFirstRow;
+          let row = i;
+          while (row !== 0 && col < row.length-1) {
+            row--;
+            col++;
+          }
+          while(rows[row] !== undefined && rows[row][col] !== undefined) {
+            if (rows[row][col] === 1) {
+              sum++;
+            }
+            row++;
+            col--;
+          }
+          if (sum > 1) {
+            return true;
+          }
+        }// if piece located
+        // check diagonal backwards and forwards
+      }
       return false; // fixme
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      let rows = this.rows();
+      for (let i = 0; i < rows.length; i++) {
+        let hasConflict = this.hasMinorDiagonalConflictAt(i);
+        if (hasConflict) {
+          return true;
+        }
+      }
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
