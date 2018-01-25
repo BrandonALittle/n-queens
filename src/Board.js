@@ -86,7 +86,7 @@
       if (sum > 1) {
         return true;
       }
-      return false; // sum the row, if greater than 1 return true, else return false
+      return false;
     },
 
     // test if any rows on this board contain conflicts
@@ -97,7 +97,7 @@
           return true;
         }
       }
-      return false; // fixme
+      return false;
     },
 
 
@@ -107,12 +107,25 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      let rows = this.rows();
+      let sum = rows.reduce(function(sum, row) {
+        return sum + row[colIndex];
+      }, 0);
+      if (sum > 1) {
+        return true;
+      }
+      return false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      let rows = this.rows();
+      for (let i = 0; i < rows.length; i++) {
+        if (this.hasColConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
