@@ -80,19 +80,17 @@
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
       let row = this.get(rowIndex);
-      let sum = row.reduce(function(sum, item) {
-        return sum + item;
-      }, 0);
-      if (sum > 1) {
-        return true;
+      let count = 0;
+      for (let i = 0; i < row.length; i++) {
+        count += row[i];
       }
-      return false;
+      return count > 1;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      let rows = this.rows();
-      for (let i = 0; i < rows.length; i++) {
+      let rows = this.get('n');
+      for (let i = 0; i < rows; i++) {
         if (this.hasRowConflictAt(i)) {
           return true;
         }
@@ -108,19 +106,17 @@
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
       let rows = this.rows();
-      let sum = rows.reduce(function(sum, row) {
-        return sum + row[colIndex];
-      }, 0);
-      if (sum > 1) {
-        return true;
+      let count = 0;
+      for (let i = 0; i < rows.length; i++) {
+        count += rows[i][colIndex];
       }
-      return false;
+      return count > 1;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      let rows = this.rows();
-      for (let i = 0; i < rows.length; i++) {
+      let rows = this.get('n');
+      for (let i = 0; i < rows; i++) {
         if (this.hasColConflictAt(i)) {
           return true;
         }
