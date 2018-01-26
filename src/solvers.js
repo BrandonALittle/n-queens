@@ -16,26 +16,90 @@
 
 
 window.findNRooksSolution = function(n) {
+  let board = new Board({n: n});
   var solution = undefined; //fixme
 
+  var findFirstRooksSolution = function(board, startRow, endRow) {
+    //if startRow === endRow return board
+    if (startRow === endRow) {
+      return board;
+    }
+
+    //for 0 to n
+    for (let i = 0; i < endRow; i++) {
+      //toggle piece at startRow and i
+      board.togglePiece(i, startRow);
+      //if no conflicts
+      if (!board.hasAnyRooksConflicts()) {
+        return findFirstRooksSolution(board, startRow + 1, endRow);
+      }
+      //untoggle piece atstartRow
+      board.togglePiece(i, startRow);
+    }
+  };
+
+  solution = findFirstRooksSolution(board, 0, n);
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
+  return solution.rows();
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  let board = new Board({n: n});
+  let count = 0;
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount;
+  let findFirstRooksSolution = function(board, startRow, endRow) {
+  //if startRow === endRow return board
+    if (startRow === endRow) {
+      count++;
+      return;
+    }
+
+    //for 0 to n
+    for (let i = 0; i < endRow; i++) {
+      //toggle piece at startRow and i
+      board.togglePiece(i, startRow);
+      //if no conflicts
+      if (!board.hasAnyRooksConflicts()) {
+        findFirstRooksSolution(board, startRow + 1, endRow);
+      }
+      //untoggle piece atstartRow
+      board.togglePiece(i, startRow);
+    }
+  };
+  findFirstRooksSolution(board, 0, n);
+
+  console.log('Number of solutions for ' + n + ' rooks:', count);
+  return count;
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
+  let board = new Board({n: n});
   var solution = undefined; //fixme
 
+  var findFirstQueensSolution = function(board, startRow, endRow) {
+    //if startRow === endRow return board
+    if (startRow === endRow) {
+      return board;
+    }
+
+    //for 0 to n
+    for (let i = 0; i < endRow; i++) {
+      //toggle piece at startRow and i
+      board.togglePiece(startRow, i);
+      //if no conflicts
+      if (!board.hasAnyQueensConflicts()) {
+        return findFirstQueensSolution(board, startRow + 1, endRow);
+      }
+      //untoggle piece atstartRow
+      board.togglePiece(startRow, i);
+    }
+  };
+
+  solution = findFirstQueensSolution(board, 0, n);
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
-  return solution;
+  return solution.rows();
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
