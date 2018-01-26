@@ -135,40 +135,24 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      let rows = this.rows();// get rows
-      for (let i = 0; i < rows.length; i++) {// iterate through column (rows[i][column]...)
-        let currentItem = rows[i][majorDiagonalColumnIndexAtFirstRow];// locate pieces in column
-        if (currentItem === 1) {
-          let sum = 0;
-          let col = majorDiagonalColumnIndexAtFirstRow;
-          let row = i;
-          while (row !== 0 && col !== 0) {
-            row--;
-            col--;
-          }
-          //debugger;
-          while(rows[row] !== undefined && rows[row][col] !== undefined) {
-            if (rows[row][col] === 1) {
-              sum++;
-            }
-            row++;
-            col++;
-          }
-          if (sum > 1) {
-            return true;
-          }
-        }// if piece located
-        // check diagonal backwards and forwards
+      let size = this.get('n'); // get size
+      let count = 0; // set count to zero
+      let rowIdx = 0; // set starting row to first row
+      let colIdx = majorDiagonalColumnIndexAtFirstRow; // set starting column to input argument
+      for ( ; rowIdx < size && colIdx < size; rowIdx++, colIdx++) { // iterate across the diagonal
+        if (colIdx >= 0) { // check to see if column index is greater than or equal to zero
+          let row = this.get(rowIdx);// get current row
+          count += row[colIdx];// increment count with current value
+        }
       }
-      return false; // fixme
+      return count > 1;// return count
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      let rows = this.rows();
-      for (let i = 0; i < rows.length; i++) {
-        let hasConflict = this.hasMajorDiagonalConflictAt(i);
-        if (hasConflict) {
+      let size = this.get('n');// get size
+      for (let i = 1 - size; i < size; i++) {
+        if (this.hasMajorDiagonalConflictAt(i)) {
           return true;
         }
       }
@@ -182,39 +166,24 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      let rows = this.rows();// get rows
-      for (let i = 0; i < rows.length; i++) {// iterate through column (rows[i][column]...)
-        let currentItem = rows[i][minorDiagonalColumnIndexAtFirstRow];// locate pieces in column
-        if (currentItem === 1) {
-          let sum = 0;
-          let col = minorDiagonalColumnIndexAtFirstRow;
-          let row = i;
-          while (row !== 0 && col < row.length-1) {
-            row--;
-            col++;
-          }
-          while(rows[row] !== undefined && rows[row][col] !== undefined) {
-            if (rows[row][col] === 1) {
-              sum++;
-            }
-            row++;
-            col--;
-          }
-          if (sum > 1) {
-            return true;
-          }
-        }// if piece located
-        // check diagonal backwards and forwards
+      let size = this.get('n'); // get size
+      let count = 0; // set count to zero
+      let rowIdx = 0; // set starting row to first row
+      let colIdx = minorDiagonalColumnIndexAtFirstRow; // set starting column to input argument
+      for ( ; rowIdx < size && colIdx >= 0; rowIdx++, colIdx--) { // iterate across the diagonal
+        if (colIdx < size) { // check to see if column index is in bounds
+          let row = this.get(rowIdx);// get current row
+          count += row[colIdx];// increment count with current value
+        }
       }
-      return false; // fixme
+      return count > 1;// fixme
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      let rows = this.rows();
-      for (let i = 0; i < rows.length; i++) {
-        let hasConflict = this.hasMinorDiagonalConflictAt(i);
-        if (hasConflict) {
+      let size = this.get('n');
+      for (let i = size * 2 - 1; i >= 0; i--) {
+        if (this.hasMinorDiagonalConflictAt(i)) {
           return true;
         }
       }
