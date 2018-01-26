@@ -78,34 +78,60 @@ window.findNQueensSolution = function(n) {
   let board = new Board({n: n});
   var solution = undefined; //fixme
 
-  var findFirstQueensSolution = function(board, startRow, endRow) {
+  var findFirstQueensSolution = function(startRow) {
     //if startRow === endRow return board
-    if (startRow === endRow) {
-      return board;
+    if (startRow === n) {
+      return _.map(board.rows(), function(row) {
+        return row.slice();
+      });
     }
 
     //for 0 to n
-    for (let i = 0; i < endRow; i++) {
+    for (let i = 0; i < n; i++) {
       //toggle piece at startRow and i
       board.togglePiece(startRow, i);
       //if no conflicts
       if (!board.hasAnyQueensConflicts()) {
-        return findFirstQueensSolution(board, startRow + 1, endRow);
+        return findFirstQueensSolution(startRow + 1);
       }
       //untoggle piece atstartRow
       board.togglePiece(startRow, i);
     }
   };
 
-  solution = findFirstQueensSolution(board, 0, n);
+  solution = findFirstQueensSolution(0);
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
-  return solution.rows();
+  return solution;
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  //var solutionCount = undefined; // declared solution counter
+  let board = new Board({n: n});
+  let count = 0;
 
-  console.log('Number of solutions for ' + n + ' queens:', solutionCount);
-  return solutionCount;
+  let findFirstQueensSolution = function(startRow) {
+  //if startRow === endRow return board
+    if (startRow === n) {
+      count++;
+      return;
+    }
+
+    //for 0 to n
+    for (let i = 0; i < n; i++) {
+      //toggle piece at startRow and i
+      board.togglePiece(i, startRow);
+      //if no conflicts
+      if (!board.hasAnyQueensConflicts()) {
+        findFirstQueensSolution(startRow + 1);
+      }
+      //untoggle piece atstartRow
+      board.togglePiece(i, startRow);
+    }
+  };
+  findFirstQueensSolution(0);
+
+  //
+  console.log('Number of solutions for ' + n + ' queens:', count);
+  return count;
 };
